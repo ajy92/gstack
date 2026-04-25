@@ -214,7 +214,10 @@ curl -s -X POST "http://127.0.0.1:3100/api/companies/473939b4-12c7-4c47-9576-d61
 
 **memory 읽기:** heartbeat 시작 시 `memory read`를 한 번 실행해서 축적된 지식 확인.
 
-**용량 제한:** MEMORY.md는 2200자. 오래된/중복 항목은 `memory replace`로 통합.
+**용량 관리 (2200자 제한 — 꽉 차면 add 실패):**
+1. **통합**: 같은 에이전트/주제 항목 2개+ → `memory replace`로 한 줄로 병합
+2. **폐기**: AGENTS.md에 이미 반영된 지식 → `memory remove`
+3. **압축**: 긴 설명 → 핵심만 남기고 `memory replace`
 
 ---
 

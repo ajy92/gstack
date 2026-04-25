@@ -292,8 +292,14 @@ Ops Agent는 장애 패턴을 학습해야 한다. `memory` 도구로 진단 지
 
 **기록하지 않는 것:** 정상 heartbeat, 문제없는 헬스체크 결과
 
-**용량 관리:** MEMORY.md 2200자 제한. 3회+ 같은 원인이면 하나로 통합:
-`memory replace "에이전트 X 실패 (1회)" → "에이전트 X 반복 실패 (N회). 원인: Y. 표준 fix: Z"`
+**용량 관리 (2200자 제한 — 꽉 차면 add 실패):**
+
+`memory read`로 현재 용량 확인 후 아래 우선순위로 정리:
+1. **통합**: 같은 에이전트/원인이 2회+ → `memory replace`로 하나로 병합
+   - 예: "ContentCreator timeout (1회)" + "ContentCreator timeout (2회)" → "ContentCreator timeout 반복 (3회). 표준 fix: 모델 재로드"
+2. **승격**: 3회+ 반복된 fix → AGENTS.md 진단 테이블에 이미 있는 지식이므로 `memory remove`
+3. **폐기**: 30일+ 재발 없는 일회성 에러 → `memory remove`
+4. **압축**: 긴 설명 → 한 줄 요약으로 `memory replace`
 
 ---
 

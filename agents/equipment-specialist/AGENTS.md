@@ -95,6 +95,11 @@ If you cannot complete the task (missing input files, tools unavailable, unclear
 
 **기록하지 않는 것:** 정상 작업 완료, 매번 바뀌는 날짜/파일명
 
+**용량 관리 (2200자 제한 — 꽉 차면 add 실패):**
+- `memory read`로 현재 항목 확인
+- 중복/오래된 항목 → `memory replace`로 통합 또는 `memory remove`
+- 이미 해결되어 재발 없는 에러 → `memory remove`
+
 ---
 
 ## 사용자 질문이 필요할 때 — Approval 요청
