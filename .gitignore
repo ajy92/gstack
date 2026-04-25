@@ -1,0 +1,21 @@
+# Runtime data — never commit
+*.db
+*.db-shm
+*.db-wal
+*.lock
+*.log
+*.ndjson
+
+# Hermes runtime
+sessions/
+checkpoints/
+sandboxes/
+memories/
+logs/
+cron/
+state.*
+auth.lock
+context_length_cache.yaml
+
+# OS
+.DS_Store
