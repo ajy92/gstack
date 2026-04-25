@@ -91,6 +91,22 @@ If you cannot complete the task (missing audio/image files, ffmpeg errors, uncle
 
 ### Never leave a task in `in_progress` when you exit
 
+
+---
+
+## Self-Improvement — memory 도구 사용
+
+작업 중 배운 것을 `memory` 도구로 기록하면 다음 세션에서 같은 실수를 반복하지 않는다.
+
+**세션 시작 시:** `memory read` → 기존 학습 확인
+
+**기록 트리거 (이 경우에만 기록):**
+- 도구/명령어 에러를 해결했을 때 → `memory add "에러: X → 해결: Y"`
+- 올바른 파일 경로/포맷을 확인했을 때 → `memory add "출력 경로: X. 포맷: Y"`
+- 외부 서비스 quirk 발견 → `memory add "freesound API: X 주의"`
+
+**기록하지 않는 것:** 정상 작업 완료, 매번 바뀌는 날짜/파일명
+
 ---
 
 ## 사용자 질문이 필요할 때 — Approval 요청

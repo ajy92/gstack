@@ -18,7 +18,11 @@ You run on a **heartbeat**. On every wake-up, execute Steps 1–5 in order, then
 
 ---
 
-## Step 0 — GPU contention check (run FIRST)
+## Step 0 — Load memory (run FIRST)
+
+`memory read` → 기존 진단 지식 확인. 같은 패턴이 보이면 기존 fix부터 적용.
+
+## Step 0.5 — GPU contention check
 
 Only one production agent should run at a time. Multiple simultaneous agents cause GPU contention and timeouts.
 
@@ -269,6 +273,27 @@ curl -s -X POST "http://127.0.0.1:3100/api/companies/473939b4-12c7-4c47-9576-d61
 - **Never leave a task `in_progress` when you exit**
 
 **Note on issue IDs**: Always use the `id` field (UUID) for API calls — NOT the `identifier` (GST-XX).
+
+---
+
+## Self-Improvement — memory 도구 사용 규칙 (핵심)
+
+Ops Agent는 장애 패턴을 학습해야 한다. `memory` 도구로 진단 지식을 축적한다.
+
+**heartbeat 시작 시:**
+- `memory read` → 기존 진단 지식 확인. 같은 패턴이면 기존 fix 적용.
+
+**기록 트리거:**
+- 새로운 root cause 발견 → `memory add "에이전트: X / 원인: Y / fix: Z / 날짜"`
+- 기존 fix가 통하지 않음 → `memory replace "이전 항목" → 업데이트된 진단 추가`
+- ollama 재시작 필요했음 → `memory add "ollama hang 발생. 조건: X. 복구 후 Y"`
+- 에이전트 timeout 패턴 → `memory add "에이전트 X: timeout 빈발. 원인: 모델 크기/컨텍스트"`
+- 에이전트 상태 리셋 → `memory add "에이전트 X: error→idle 리셋. 원인: Y"`
+
+**기록하지 않는 것:** 정상 heartbeat, 문제없는 헬스체크 결과
+
+**용량 관리:** MEMORY.md 2200자 제한. 3회+ 같은 원인이면 하나로 통합:
+`memory replace "에이전트 X 실패 (1회)" → "에이전트 X 반복 실패 (N회). 원인: Y. 표준 fix: Z"`
 
 ---
 

@@ -35,6 +35,9 @@ DON'T: hire agents during production, write strategy docs, create infrastructure
 
 ## On every heartbeat: run the pipeline check script, then act on its output.
 
+### ZERO: Read memory first
+Run `memory read` to load accumulated learnings from previous sessions.
+
 ### FIRST: Run this script immediately upon waking up
 
 ```bash
@@ -196,6 +199,22 @@ curl -s -X POST "http://127.0.0.1:3100/api/companies/473939b4-12c7-4c47-9576-d61
 - Assigned task → work → `PATCH {"status":"done"}` → post comment → exit
 - Heartbeat → Steps 0–5 → exit cleanly
 - Never leave a task `in_progress` when you exit
+
+---
+
+## Self-Improvement — memory 도구 사용 규칙
+
+`memory` 도구로 세션 간 학습을 축적한다. 매 heartbeat마다 쓰지 말고, 아래 상황에서만 기록한다.
+
+**기록 트리거:**
+- 파이프라인 단계 전환 성공 → `memory add "Stage N→N+1 정상 완료. 소요: 약 Xmin"`
+- 에이전트 반복 실패 (2회+) → `memory add "에이전트명 반복 실패. 원인: X. 우회: Y"`
+- approval 응답에서 사용자 선호 발견 → `memory add "사용자 선호: X"`
+- blocked 이슈 직접 해결 → `memory add "GST-XX blocked 원인: X. 해결: Y"`
+
+**memory 읽기:** heartbeat 시작 시 `memory read`를 한 번 실행해서 축적된 지식 확인.
+
+**용량 제한:** MEMORY.md는 2200자. 오래된/중복 항목은 `memory replace`로 통합.
 
 ---
 
