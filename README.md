@@ -28,9 +28,16 @@ agents/
 ├── content-strategist/ 전략 지원 (qwen3.5:9b)
 └── upload-agent/      Stage 4 — YouTube 업로드 (qwen3.5:9b)
 
-hermes-profile/
-├── SOUL.md            GStack 공용 컨텍스트 (에이전트 roster, 규칙)
-└── config.yaml        hermes 프로필 설정 (ollama 연결, 병렬화 전략)
+hermes-profiles/
+├── gstack-mgmt/       CEO + Ops — 파이프라인 관리 + 장애 진단 memory
+│   ├── SOUL.md
+│   └── config.yaml
+├── gstack-prod-35b/   Content Generator + Equipment + Creator — 창작/도구 memory
+│   ├── SOUL.md
+│   └── config.yaml
+└── gstack-prod-9b/    SEO + Upload + Strategist — 텍스트/API memory
+    ├── SOUL.md
+    └── config.yaml
 
 scripts/
 ├── ollama-watchdog.sh              ollama hang 감지 및 자동 재시작
@@ -46,14 +53,26 @@ scripts/
 
 두 모델을 동시에 로드해 Stage 2 병렬 실행(Equipment + SEO)을 지원한다.
 
+### Memory 분리 (프로필별)
+
+각 프로필은 독립적인 `memories/MEMORY.md`를 가져 역할별 학습이 섞이지 않는다.
+
+| 프로필 | memory 축적 내용 | 2200자 한도 |
+|--------|-----------------|-------------|
+| gstack-mgmt | 파이프라인 패턴, 장애 root cause, 사용자 선호 | 독립 |
+| gstack-prod-35b | ffmpeg 옵션, 오디오 처리 팁, freesound quirk | 독립 |
+| gstack-prod-9b | SEO 메타데이터 패턴, YouTube API 사용법 | 독립 |
+
 ## 셋업
 
 ### 1. hermes 프로필 설치
 
 ```bash
-mkdir -p ~/.hermes/profiles/gstack/memories
-cp hermes-profile/SOUL.md ~/.hermes/profiles/gstack/SOUL.md
-cp hermes-profile/config.yaml ~/.hermes/profiles/gstack/config.yaml
+for profile in gstack-mgmt gstack-prod-35b gstack-prod-9b; do
+  mkdir -p ~/.hermes/profiles/$profile/memories
+  cp hermes-profiles/$profile/SOUL.md ~/.hermes/profiles/$profile/SOUL.md
+  cp hermes-profiles/$profile/config.yaml ~/.hermes/profiles/$profile/config.yaml
+done
 ```
 
 ### 2. ollama watchdog 설치
